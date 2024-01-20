@@ -26,6 +26,10 @@ class NewsViewModel (app : Application, private val newsRepository: NewsReposito
     var searchNewsPageNum = 1
     var searchNewsResponse : NewsResponse? = null
 
+    init {
+        getBreakingNews()
+    }
+
     fun getBreakingNews () = viewModelScope.launch {
         breakingNews.postValue(Resource.Loading())
         try{

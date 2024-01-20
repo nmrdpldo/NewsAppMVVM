@@ -56,8 +56,6 @@ class BreakingNewsFragment : BaseFragment<FragmentBreakingNewsBinding>() {
 
         })
 
-        viewModel.getBreakingNews()
-
     }
 
     private fun hideProgressBar(){
