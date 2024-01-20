@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.NewsAppMVVM" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">@color/royal_blue</item>
+        <item name="colorPrimaryDark">@color/royal_blue</item>
+        <item name="colorAccent">@color/royal_blue</item>
+    </style>
+</resources>

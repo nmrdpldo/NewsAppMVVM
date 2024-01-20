@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@null"
+            app:queryHint="Search for News" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/searchView"/>
+
+        <TextView
+            android:id="@+id/empty_search_txt"
+            android:layout_below="@id/searchView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No news."
+            android:textSize="18sp"
+            android:fontFamily="@font/sf_pro_text_semi_bold"
+            android:layout_marginTop="24dp"
+            android:layout_centerHorizontal="true"/>
+
+        <RelativeLayout
+            android:visibility="invisible"
+            android:id="@+id/progressBarSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ProgressBar
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="100dp"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>

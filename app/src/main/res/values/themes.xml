@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.NewsAppMVVM" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+         <item name="colorPrimary">@color/royal_blue</item>
+        <item name="colorPrimaryDark">@color/royal_blue</item>
+        <item name="colorAccent">@color/royal_blue</item>
+    </style>
+
+    <style name="Theme.NewsAppMVVM" parent="Base.Theme.NewsAppMVVM" />
+
+
+    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">10sp</item>
+    </style>
+</resources>
