@@ -13,7 +13,13 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/breakingNewsFragment"
+            app:popUpToInclusive="true"/>
+
+        <!-- The code below fixes the fragment issue -->
+        <!--app:popUpTo="@id/breakingNewsFragment"
+        app:popUpToInclusive="true"-->
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
@@ -25,7 +31,13 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/savedNewsFragment"
+            app:popUpToInclusive="true"/>
+
+        <!-- The code below fixes the fragment issue -->
+        <!--app:popUpTo="@id/savedNewsFragment"
+        app:popUpToInclusive="true"-->
     </fragment>
     <fragment
         android:id="@+id/searchNewsFragment"
@@ -37,33 +49,18 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/searchNewsFragment"
+            app:popUpToInclusive="true"/>
+
+        <!-- The code below fixes the fragment issue -->
+        <!--app:popUpTo="@id/searchNewsFragment"
+        app:popUpToInclusive="true"-->
     </fragment>
 
     <fragment
         android:id="@+id/articleFragment"
         android:name="com.example.newsappmvvm.ui.ArticleFragment"
         android:label="ArticleFragment" >
-        <!--<action
-            android:id="@+id/action_articleFragment_to_breakingNewsFragment"
-            app:destination="@id/breakingNewsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_articleFragment_to_savedNewsFragment"
-            app:destination="@id/savedNewsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_articleFragment_to_searchNewsFragment"
-            app:destination="@id/searchNewsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />-->
     </fragment>
 </navigation>

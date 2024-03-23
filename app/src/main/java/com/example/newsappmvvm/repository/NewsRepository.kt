@@ -1,22 +1,27 @@
 package com.example.newsappmvvm.repository
 
-import com.example.newsappmvvm.api.retrofit.RetrofitInstance
+import com.example.newsappmvvm.api.ApiService
+import com.example.newsappmvvm.db.ArticleDao
 import com.example.newsappmvvm.db.ArticleDatabase
 import com.example.newsappmvvm.model.Article
+import javax.inject.Inject
 
-class NewsRepository(val db : ArticleDatabase) {
+class NewsRepository @Inject constructor(
+    private val articleDao: ArticleDao,
+    private val api : ApiService
+) {
 
     suspend fun getBreakingNews(countryCode: String, pageNumber : Int) =
-        RetrofitInstance.Api.getBreakingNews(countryCode,pageNumber)
+        api.getBreakingNews(countryCode,pageNumber)
 
     suspend fun searchNews(searchQuery : String, pageNumber : Int) =
-        RetrofitInstance.Api.searchNews(searchQuery,pageNumber)
+        api.searchNews(searchQuery,pageNumber)
 
-    fun getSavedArticles() = db.getArticleDao().getAllArticles()
+    fun getSavedArticles() = articleDao.getAllArticles()
 
     suspend fun upsertArticle(article : Article) =
-        db.getArticleDao().upsert(article)
+        articleDao.upsert(article)
 
     suspend fun deleteArticle(article: Article) =
-        db.getArticleDao().deleteArticle(article)
+        articleDao.deleteArticle(article)
 }

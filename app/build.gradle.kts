@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
-    //id ("androidx.navigation.safeargs.kotlin")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -58,12 +58,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 
     packaging {
@@ -83,16 +83,18 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    //data binding
-    //annotationProcessor ("androidx.databinding:databinding-compiler:8.1.3")
-
 
     // Architectural Components
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
     // Room
     implementation ("androidx.room:room-runtime:2.6.0")
-    ksp("androidx.room:room-compiler:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+
+    //Dagger - Hilt
+    implementation("com.google.dagger:hilt-android:2.49")
+    kapt("com.google.dagger:hilt-android-compiler:2.49")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Kotlin Extensions and Coroutines support for Room
     implementation ("androidx.room:room-ktx:2.6.0")
@@ -122,7 +124,6 @@ dependencies {
 
     implementation ("com.squareup.picasso:picasso:2.5.2")
     implementation ("com.github.piasy:GlideImageLoader:1.8.1")
-    //ksp ("com.github.bumptech.glide:ksp:4.14.2")
 
 
     testImplementation("junit:junit:4.13.2")
