@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,8 @@ import com.example.newsappmvvm.model.NewsResponse
 import com.example.newsappmvvm.repository.NewsRepository
 import com.example.newsappmvvm.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
@@ -24,11 +27,15 @@ class NewsViewModel @Inject constructor(
     app : Application,
     private val newsRepository: NewsRepository
 ) : AndroidViewModel(app) {
-    val breakingNews : MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+
+    val _breakingNews : MutableStateFlow<Resource<NewsResponse>> = MutableStateFlow(Resource.Loading())
+    val breakingNews = _breakingNews.asStateFlow()
     var breakingNewsPageNum = 1
     var breakingNewsResponse : NewsResponse? = null
 
-    val searchNewsData : MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    val _searchNewsData : MutableStateFlow<Resource<NewsResponse>> = MutableStateFlow(Resource.Loading())
+    val searchNewsData = _searchNewsData.asStateFlow()
+    val isInitialLoad = mutableStateOf(true)
     var searchNewsPageNum = 1
     var searchNewsResponse : NewsResponse? = null
 
@@ -37,35 +44,35 @@ class NewsViewModel @Inject constructor(
     }
 
     fun getBreakingNews () = viewModelScope.launch {
-        breakingNews.postValue(Resource.Loading())
+        _breakingNews.value = Resource.Loading()
         try{
             if(hasInternetConnection()){
                 val response = newsRepository.getBreakingNews("us",breakingNewsPageNum)
-                breakingNews.postValue(handleBreakingNewsResponse(response))
+                _breakingNews.value = handleBreakingNewsResponse(response)
             }else{
-                breakingNews.postValue(Resource.Error("No internet connection"))
+                _breakingNews.value = Resource.Error("No internet connection")
             }
         }catch (t : Throwable) {
             when (t) {
-                is IOException -> breakingNews.postValue(Resource.Error("Network Failure"))
-                else -> breakingNews.postValue(Resource.Error("Conversion Failure"))
+                is IOException -> _breakingNews.value = Resource.Error("Network Failure")
+                else -> _breakingNews.value = Resource.Error("Conversion Failure")
             }
         }
     }
 
     fun searchNews (searchQuery : String) = viewModelScope.launch {
-        searchNewsData.postValue(Resource.Loading())
+        _searchNewsData.value = Resource.Loading()
         try{
             if(hasInternetConnection()){
                 val response = newsRepository.searchNews(searchQuery,searchNewsPageNum)
-                searchNewsData.postValue(handleSearchNewsResponse(response))
+                _searchNewsData.value = handleSearchNewsResponse(response)
             }else{
-                searchNewsData.postValue(Resource.Error("No internet connection"))
+                _searchNewsData.value = Resource.Error("No internet connection")
             }
         }catch (t : Throwable) {
             when (t) {
-                is IOException -> searchNewsData.postValue(Resource.Error("Network Failure"))
-                else -> searchNewsData.postValue(Resource.Error("Conversion Failure"))
+                is IOException -> _searchNewsData.value = Resource.Error("Network Failure")
+                else -> _searchNewsData.value = Resource.Error("Conversion Failure")
             }
         }
     }

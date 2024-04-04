@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AbsListView
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +19,8 @@ import com.example.newsappmvvm.databinding.FragmentBreakingNewsBinding
 import com.example.newsappmvvm.utils.BaseFragment
 import com.example.newsappmvvm.utils.Resource
 import com.example.newsappmvvm.viewmodel.NewsViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class BreakingNewsFragment : BaseFragment<FragmentBreakingNewsBinding>() {
     override fun getLayoutID(): Int {
@@ -29,7 +34,37 @@ class BreakingNewsFragment : BaseFragment<FragmentBreakingNewsBinding>() {
         viewModel = (activity as MainActivity).viewModel
         initBreakingNewsAdapter()
 
-        viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.breakingNews.collectLatest { response ->
+                    when(response){
+                        is Resource.Success -> {
+                            hideProgressBar()
+                            response.data?.let {newsResponse ->
+                                breakingNewsAdapter.differ.submitList(newsResponse.articles.toList())
+                                val totalPages = newsResponse.totalResults / PAGE_QUERY_SIZE + 2 // added one because the quotient is rounded off then added 1 again because the last page is empty
+                                isLastPage = viewModel.breakingNewsPageNum == totalPages
+                                if(isLastPage){
+                                    binding.rvBreakingNews.setPadding(0,0,0,0)
+                                }
+                            }
+                        }
+                        is Resource.Error -> {
+                            hideProgressBar()
+                            response.message?.let{ message ->
+                                Toast.makeText(context, "An error occurred: $message", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        is Resource.Loading -> {
+                            showProgressBar()
+                        }
+
+                    }
+                }
+            }
+        }
+
+        /*viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
             when(response){
                 is Resource.Success -> {
                     hideProgressBar()
@@ -54,7 +89,7 @@ class BreakingNewsFragment : BaseFragment<FragmentBreakingNewsBinding>() {
 
             }
 
-        })
+        })*/
 
     }
 

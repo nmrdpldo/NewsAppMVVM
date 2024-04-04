@@ -5,7 +5,11 @@ import android.view.View
 import android.widget.AbsListView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +25,7 @@ import com.example.newsappmvvm.viewmodel.NewsViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class SearchNewsFragment : BaseFragment<FragmentSearchNewsBinding>() {
@@ -36,7 +41,47 @@ class SearchNewsFragment : BaseFragment<FragmentSearchNewsBinding>() {
         initSearchNewsAdapter()
         initSearch()
 
-        viewModel.searchNewsData.observe(viewLifecycleOwner, Observer { response ->
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchNewsData.collectLatest { response ->
+                    when(response){
+                        is Resource.Success -> {
+                            hideProgressBar()
+                            response.data?.let {newsResponse ->
+                                searchNewsAdapter.differ.submitList(newsResponse.articles.toList())
+                                val totalPages = newsResponse.totalResults / PAGE_QUERY_SIZE + 2 // added one because the quotient is rounded off then added 1 again because the last page is empty
+                                isLastPage = viewModel.searchNewsPageNum == totalPages
+                                if(isLastPage){
+                                    binding.searchRv.setPadding(0,0,0,0)
+                                }
+
+                                if(newsResponse.articles.toList().isEmpty()){
+                                    binding.emptySearchTxt.visibility = View.VISIBLE
+                                }else{
+                                    binding.emptySearchTxt.visibility = View.INVISIBLE
+                                }
+                            }
+                        }
+                        is Resource.Error -> {
+                            hideProgressBar()
+                            response.message?.let{ message ->
+                                Toast.makeText(context, "An error occurred: $message", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        is Resource.Loading -> {
+                            if(viewModel.isInitialLoad.value){
+                                viewModel.isInitialLoad.value = false
+                            }else{
+                                showProgressBar()
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        /*viewModel.searchNewsData.observe(viewLifecycleOwner, Observer { response ->
             when(response){
                 is Resource.Success -> {
                     hideProgressBar()
@@ -67,7 +112,7 @@ class SearchNewsFragment : BaseFragment<FragmentSearchNewsBinding>() {
 
             }
 
-        })
+        })*/
     }
 
     private fun hideProgressBar(){
