@@ -84,6 +84,8 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 
+
+
     // Architectural Components
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
@@ -93,8 +95,12 @@ dependencies {
 
     //Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.49")
+    implementation("androidx.hilt:hilt-common:1.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.49")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation ("androidx.hilt:hilt-work:1.2.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    kapt ("androidx.hilt:hilt-compiler:1.2.0")
 
     // Kotlin Extensions and Coroutines support for Room
     implementation ("androidx.room:room-ktx:2.6.0")
@@ -125,6 +131,7 @@ dependencies {
     implementation ("com.squareup.picasso:picasso:2.5.2")
     implementation ("com.github.piasy:GlideImageLoader:1.8.1")
 
+    androidTestImplementation ("androidx.work:work-testing:2.9.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
